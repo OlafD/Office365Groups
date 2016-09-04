@@ -38,7 +38,7 @@ Write-Host "Start processing..."
 
 $collection = @()
 
-$exchangeGroups = Get-Group
+$exchangeGroups = Get-UnifiedGroup -ResultSize unlimited
 $count = $exchangeGroups.Count
 Write-Host "$count groups found in Exchange Online"
 Write-Host
@@ -55,12 +55,10 @@ foreach ($exchangeGroup in $exchangeGroups)
 	$i++
 
 	$groupName = $exchangeGroup.DisplayName
-
-	if ($groupName -ne "") 
+	$siteUrl = $exchangeGroup.SharePointSiteUrl
+	
+	if ($siteUrl -ne "") 
 	{
-		$siteName = MakeSiteName $groupName
-        $siteUrl = $Url + $siteName
-
 		Try
 		{
 			$site = Get-SPOSite $siteUrl -ErrorAction SilentlyContinue
